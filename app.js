@@ -9,6 +9,7 @@ const filterOption = document.querySelector(".filter-todo");
 document.addEventListener("DOMContentLoaded", getTodos);
 todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
+todoList.addEventListener("click", completeCheck);
 filterOption.addEventListener("click", filterTodo);
 
 //Functions
@@ -49,7 +50,11 @@ function addTodo(event) {
 }
 
 function deleteCheck(e) { 
-    const item = e.target;
+
+    // delete promise
+    return new Promise ((resolve, reject) => {
+
+        const item = e.target;
 
     if(item.classList[0] === "trash-btn") {
         const todo = item.parentElement;
@@ -59,10 +64,22 @@ function deleteCheck(e) {
         todo.addEventListener("transitionend", function() {
             todo.remove();
         });
-    }
 
-    //Check mark
-    if(item.classList[0] === "complete-btn") {
+        resolve("Success");
+    } else {
+        reject ("Failure");
+    }
+    })
+
+}
+
+const promise = deleteCheck();
+promise.then(SuccessCallback, failureCallBack);
+
+function completeCheck(e) {
+    const item = e.target;
+
+    if (item.classList[0] === "complete-btn"){
         const todo = item.parentElement;
         todo.classList.toggle("completed");
     }
